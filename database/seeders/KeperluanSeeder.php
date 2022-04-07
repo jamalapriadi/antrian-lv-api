@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Keperluan;
+use App\Models\Receptionist;
 
 class KeperluanSeeder extends Seeder
 {
@@ -19,5 +20,9 @@ class KeperluanSeeder extends Seeder
         Keperluan::create(['nama'=>'Pendaftaran','created_at'=>date('Y-m-d H:i:s'),'no_urut'=>3]);
         Keperluan::create(['nama'=>'Pengambilan Produk','created_at'=>date('Y-m-d H:i:s'),'no_urut'=>4]);
         Keperluan::create(['nama'=>'Pengaduan','created_at'=>date('Y-m-d H:i:s'),'no_urut'=>5]);
+
+        Receptionist::create(['nama'=>'Receptionist 1']);
+        Receptionist::create(['nama'=>'Receptionist 2']);
+        Receptionist::create(['nama'=>'Receptionist 3']);
     }
 }
