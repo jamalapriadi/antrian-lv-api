@@ -29,7 +29,8 @@ class AntrianController extends Controller
 
     public function simpan_antrian(Request $request){
         $rules = [
-            'keperluan'=>'required'
+            'keperluan'=>'required',
+            'type'=>'required'
         ];
 
         $validasi = \Validator::make($request->all(), $rules);
@@ -42,6 +43,7 @@ class AntrianController extends Controller
             );
         }else{
             $model = new Antrian;
+            $model->type = $request->input('type');
             $model->tanggal = date('Y-m-d');
             $model->no_antrian = $this->getNoAntrian();
             $model->keperluan_id = $request->input('keperluan');

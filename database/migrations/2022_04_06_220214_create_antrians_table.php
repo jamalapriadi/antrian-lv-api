@@ -15,6 +15,7 @@ class CreateAntriansTable extends Migration
     {
         Schema::create('antrians', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->enum('type',[1,2])->default(2); //1 adalah prioritas, 2 adalah umum
             $table->date('tanggal')->nullable();
             $table->string('no_antrian')->nullable();
             $table->uuid('keperluan_id')->nullable();
