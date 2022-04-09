@@ -19,7 +19,7 @@ class CreateAntriansTable extends Migration
             $table->date('tanggal')->nullable();
             $table->string('no_antrian')->nullable();
             $table->uuid('keperluan_id')->nullable();
-            $table->enum('is_open',['N','Y'])->default('N');
+            $table->enum('is_finish',['N','Y'])->default('N');
             $table->timestamps();
         });
     }

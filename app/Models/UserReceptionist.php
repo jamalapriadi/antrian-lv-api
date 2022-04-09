@@ -9,4 +9,12 @@ class UserReceptionist extends Model
     use HasFactory;
 
     protected $table="user_receptionist";
+
+    public function user(){
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function receptionis(){
+        return $this->belongsTo(Receptionist::class,'receptionist_id');
+    }
 }

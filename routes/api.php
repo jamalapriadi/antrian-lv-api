@@ -11,6 +11,7 @@ use App\Http\Controllers\KeperluanController;
 use App\Http\Controllers\ReceptionistController;
 use App\Http\Controllers\UserReceptionistController;
 use App\Http\Controllers\AntrianController;
+use App\Http\Controllers\PelayananController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,7 @@ Route::post('password/recovery',[GuestController::class,'recovery_password']);
 
 Route::get('list-keperluan',[KeperluanController::class,'list_keperluan']);
 Route::post('buat-antrian',[AntrianController::class,'simpan_antrian']);
+Route::get('layar/{id}',[UserReceptionistController::class,'layar']);
 
 Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::get('/me', [AuthController::class, 'me']);
@@ -60,4 +62,8 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::post('signin-receptionist',[UserReceptionistController::class,'store']);
     Route::get('get-receptionist',[UserReceptionistController::class,'get_receptionist']);
     Route::get('available-receptionist',[UserReceptionistController::class,'available_receptionist']);
+    Route::get('list-antrian-by-user-receptionist/{id}',[UserReceptionistController::class,'list_antrian_by_user_receptionist']);
+    Route::post('change-antrian/{id}',[UserReceptionistController::class,'change_antrian']); 
+
+    Route::post('selesai-pelayanan',[PelayananController::class,'store']); 
 });
