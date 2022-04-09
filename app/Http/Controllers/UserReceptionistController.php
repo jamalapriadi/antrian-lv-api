@@ -101,7 +101,7 @@ class UserReceptionistController extends Controller
         $cek = UserReceptionist::where('tanggal',date('Y-m-d'))
             ->with(
                 [
-                    'user'
+                    'user',
                 ]
             )
             ->where('receptionist_id',$id)
@@ -109,11 +109,22 @@ class UserReceptionistController extends Controller
 
         if($cek)
         {
+            $current_antrian = \App\Models\UserReceptionistAntrian::where('tanggal',date('Y-m-d'))
+                    ->where('user_receptionist_id', $cek->id)
+                    ->with(
+                        [
+                            'antrian',
+                            'antrian.keperluan'
+                        ]
+                    )
+                    ->first();
+
             $data = array(
                 'success'=>true,
                 'message'=>'Receptionist sudah diisi',
                 'receptionist'=>$receptionist,
-                'user'=>$cek
+                'user'=>$cek,
+                'current_antrian'=>$current_antrian
             );
         }else{
             $data = array(
