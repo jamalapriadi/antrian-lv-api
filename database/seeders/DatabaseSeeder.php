@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $dua=Permission::create(['name'=>'Show Receptionist','guard_name'=>'sanctum']);
         $tiga=Permission::create(['name'=>'Show Keperluan','guard_name'=>'sanctum']);
         $empat=Permission::create(['name'=>'Show User Management','guard_name'=>'sanctum']);
+        $lima=Permission::create(['name'=>'Show Pelayanan','guard_name'=>'sanctum']);
 
         $roles = [
             ['name' => 'Admin','guard_name'=>'sanctum'],
@@ -33,12 +34,13 @@ class DatabaseSeeder extends Seeder
         $admin->givePermissionTo($dua);
         $admin->givePermissionTo($tiga);
         $admin->givePermissionTo($empat);
+        $admin->givePermissionTo($lima);
 
 
         $user=\App\Models\User::create(
             [
-                'name'=>'Jamal Apriadi',
-                'email'=>'jamal.apriadi@gmail.com',
+                'name'=>'Admin Antrian',
+                'email'=>'admin@gmail.com',
                 'email_verified_at'=>date('Y-m-d H:i:s'),
                 'password'=>bcrypt('welcome'.date('Y')),
                 'profile_picture'=>'default_avatar.png',

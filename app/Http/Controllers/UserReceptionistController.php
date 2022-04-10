@@ -137,6 +137,56 @@ class UserReceptionistController extends Controller
         return response()->json($data, 200);
     }
 
+    public function all_layar(){
+        $recept = \App\Models\Receptionist::all();
+
+        $data = array();
+        foreach($recept as $key=>$val)
+        {
+            $cek = UserReceptionist::where('tanggal',date('Y-m-d'))
+                ->with(
+                    [
+                        'user',
+                    ]
+                )
+                ->where('receptionist_id',$val->id)
+                ->first();
+            $list = array();
+
+            if($cek)
+            {
+                $current_antrian = \App\Models\UserReceptionistAntrian::where('tanggal',date('Y-m-d'))
+                    ->where('user_receptionist_id', $cek->id)
+                    ->with(
+                        [
+                            'antrian',
+                            'antrian.keperluan'
+                        ]
+                    )
+                    ->first();
+
+                $list = array(
+                    'success'=>true,
+                    'message'=>'Receptionist sudah diisi',
+                    'current_antrian'=>$current_antrian
+                );
+            }else{
+                $list = array(
+                    'success'=>false,
+                    'message'=>'Belum ada user untuk receptionist ini',
+                );
+            }
+
+            $data[]= array(
+                'id'=>$val->id,
+                'nama'=>$val->nama,
+                'list'=>$list
+            );
+        }
+
+        return $data;
+    }
+
     public function list_antrian_by_user_receptionist($id){
         //cek antrian dulu ada atau tidak
         $tersedia = \App\Models\UserReceptionistAntrian::where('tanggal',date('Y-m-d'))
@@ -147,6 +197,8 @@ class UserReceptionistController extends Controller
         $antrian_tersedia = \App\Models\Antrian::where('tanggal',date('Y-m-d'))
             ->whereNotIn('id', $tersedia)
             ->where('is_finish','N')
+            ->orderBy('type','asc')
+            ->orderBy('created_at','asc')
             ->get();
 
         if(count($antrian_tersedia) > 0)

@@ -12,6 +12,7 @@ use App\Http\Controllers\ReceptionistController;
 use App\Http\Controllers\UserReceptionistController;
 use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\PelayananController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,10 @@ Route::post('password/recovery',[GuestController::class,'recovery_password']);
 Route::get('list-keperluan',[KeperluanController::class,'list_keperluan']);
 Route::post('buat-antrian',[AntrianController::class,'simpan_antrian']);
 Route::get('layar/{id}',[UserReceptionistController::class,'layar']);
+Route::get('all-layar',[UserReceptionistController::class,'all_layar']);
+
+Route::get('timeframe',[ReportController::class,'timeframe']);
+
 
 Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::get('/me', [AuthController::class, 'me']);
@@ -65,5 +70,9 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::get('list-antrian-by-user-receptionist/{id}',[UserReceptionistController::class,'list_antrian_by_user_receptionist']);
     Route::post('change-antrian/{id}',[UserReceptionistController::class,'change_antrian']); 
 
+    Route::resource('pelayanan',PelayananController::class);
     Route::post('selesai-pelayanan',[PelayananController::class,'store']); 
+
+    Route::get('kategori-antrian',[ReportController::class,'kategori_antrian']);
+    Route::get('report-keperluan',[ReportController::class,'report_keperluan']);
 });

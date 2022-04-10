@@ -32,6 +32,15 @@ class PelayananTransformer extends TransformerAbstract
      */
     public function transform(Pelayanan $model)
     {
+        $kategori = "";
+        if($model->antrian)
+        {
+            if($model->antrian->type == 1){
+                $kategori = "Prioritas";
+            }else if($model->antrian->type == 2){
+                $kategori = "Umum";
+            }
+        }
         return [
             'id'=>$model->id,
             'tanggal'=>$model->tanggal,
@@ -43,6 +52,9 @@ class PelayananTransformer extends TransformerAbstract
             'catatan'=>$model->catatan,
             'user_id'=>$model->user_id,
             'created_at'=>$model->created_at,
+            'antrian'=>$model->antrian,
+            'keperluan'=>$model->antrian->keperluan,
+            'kategori'=>$kategori,
             'links'=>array( 
                 'detail'=> \URL::to('api/auth/pelayanan/'.$model->id)
             )

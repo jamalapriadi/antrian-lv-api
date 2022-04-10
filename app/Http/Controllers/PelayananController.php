@@ -78,6 +78,38 @@ class PelayananController extends Controller
         return response()->json($data, 201);
     }
 
+    public function update(Request $request,$id){
+        $rules=[
+            'nama'=>'required',
+            'catatan'=>'required'
+        ];
+
+        $validasi=\Validator::make($request->all(),$rules);
+
+        if($validasi->fails()){
+            $data=array(
+                'success'=>false,
+                'message'=>'Validasi gagal',
+                'error'=>$validasi->errors()->all()
+            );
+        }else{
+            $model = Pelayanan::find($id);
+            $model->nama = $request->input('nama');
+            $model->phone = $request->input('phone');
+            $model->alamat = $request->input('alamat');
+            $model->catatan = $request->input('catatan');
+            $model->save();
+
+            $data=array(
+                'success'=>true,
+                'message'=>"Data berhasil disimpan",
+                'error'=>''
+            );
+        }
+
+        return response()->json($data, 201);
+    }
+
     public function show($id){
         $model=Pelayanan::findOrFail($id);
 
