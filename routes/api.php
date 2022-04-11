@@ -73,6 +73,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::resource('pelayanan',PelayananController::class);
     Route::post('selesai-pelayanan',[PelayananController::class,'store']); 
 
+    Route::get('antrian',[AntrianController::class,'index']);
     Route::get('kategori-antrian',[ReportController::class,'kategori_antrian']);
     Route::get('report-keperluan',[ReportController::class,'report_keperluan']);
 });

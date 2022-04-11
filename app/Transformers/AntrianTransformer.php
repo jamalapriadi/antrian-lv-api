@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
+use App\Models\Antrian;
 
 class AntrianTransformer extends TransformerAbstract
 {
@@ -11,7 +12,7 @@ class AntrianTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $defaultIncludes = [
+    protected array $defaultIncludes = [
         //
     ];
     
@@ -20,7 +21,7 @@ class AntrianTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $availableIncludes = [
+    protected array $availableIncludes = [
         //
     ];
     
@@ -29,10 +30,22 @@ class AntrianTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform()
+    public function transform(Antrian $model)
     {
+        $kategori = "";
+        if($model->type == 1)
+        {
+            $kategori = "PRIORITAS";
+        }else{
+            $kategori = "UMUM";
+        }
+
         return [
-            //
+            'id'=>$model->id,
+            'tanggal'=>$model->tanggal,
+            'kategori'=>$kategori,
+            'no_antrian'=>$model->no_antrian,
+            'keperluan'=>$model->keperluan->nama
         ];
     }
 }

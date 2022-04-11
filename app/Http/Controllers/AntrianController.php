@@ -4,9 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Antrian;
+use App\Transformers\AntrianTransformer;
 
 class AntrianController extends Controller
 {
+    public function index(Request $request)
+    {
+        $model=Antrian::orderBy('tanggal','desc');
+
+        if($request->has('per_page')){
+            $halaman=$request->input('per_page');
+        }else{
+            $halaman=25;
+        }
+
+        $model=$model->paginate($halaman);
+
+        $response = fractal($model, new AntrianTransformer())
+            ->toArray();
+
+        return response()->json($response, 200);
+    }
+
     private function getNoAntrian(){
         $jumlah_hari_ini = Antrian::where('tanggal',date('Y-m-d'))
             ->count();
