@@ -21,8 +21,8 @@ class KeperluanSeeder extends Seeder
         Keperluan::create(['nama'=>'Pengambilan Produk','created_at'=>date('Y-m-d H:i:s'),'no_urut'=>4]);
         Keperluan::create(['nama'=>'Pengaduan','created_at'=>date('Y-m-d H:i:s'),'no_urut'=>5]);
 
-        Receptionist::create(['nama'=>'Receptionist 1']);
-        Receptionist::create(['nama'=>'Receptionist 2']);
-        Receptionist::create(['nama'=>'Receptionist 3']);
+        Receptionist::create(['nama'=>'Loket 1']);
+        Receptionist::create(['nama'=>'Loket 2']);
+        Receptionist::create(['nama'=>'Loket 3']);
     }
 }

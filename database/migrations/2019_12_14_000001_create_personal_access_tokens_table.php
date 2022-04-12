@@ -18,7 +18,8 @@ class CreatePersonalAccessTokensTable extends Migration
             // $table->morphs('tokenable');
             $table->string('tokenable_type');
             $table->uuid('tokenable_id');
-            $table->foreign('tokenable_id')->references('id')->on('users');
+            $table->foreign('tokenable_id')->references('id')->on('users')
+                ->onDelete('cascade');
             // end table morphs
             $table->string('name');
             $table->string('token', 64)->unique();

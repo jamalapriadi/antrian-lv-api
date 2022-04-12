@@ -17,4 +17,8 @@ class UserReceptionist extends Model
     public function receptionis(){
         return $this->belongsTo(Receptionist::class,'receptionist_id');
     }
+
+    public function keperluan(){
+        return $this->hasMany(UserReceptionistKeperluan::class,'user_receptionist_id');
+    }
 }

@@ -30,6 +30,15 @@ class KeperluanController extends Controller
         return response()->json($response, 200);
     }
 
+    public function all(){
+        $model = Keperluan::all();
+
+        $response = fractal($model, new KeperluanTransformer())
+            ->toArray();
+
+        return response()->json($response, 200);
+    }
+
     public function store(Request $request){
         $rules=[
             'nama'=>'required'

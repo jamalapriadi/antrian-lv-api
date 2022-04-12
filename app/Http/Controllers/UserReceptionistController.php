@@ -17,6 +17,7 @@ class UserReceptionistController extends Controller
                 ]
             )
             ->where('user_id', auth()->user()->id)
+            ->where('active','Y')
             ->first();
 
         if($model){
@@ -53,6 +54,7 @@ class UserReceptionistController extends Controller
             //cek dulu receptionis ini sudah ada user atau belum
             $cek = UserReceptionist::where('tanggal',date('Y-m-d'))
                 ->where('receptionist_id',$request->input('receptionist'))
+                ->where('active','Y')
                 ->count();
 
             if($cek > 0)
@@ -67,7 +69,21 @@ class UserReceptionistController extends Controller
                 $model->tanggal = date('Y-m-d');
                 $model->user_id = auth()->user()->id;
                 $model->receptionist_id = $request->input('receptionist');
-                $model->save();
+                $model->active = 'Y';
+                $simpan = $model->save();
+
+                if($simpan)
+                {
+                    $keperluan = $request->input('keperluan');
+
+                    foreach($keperluan as $key=>$val)
+                    {
+                        $k = new \App\Models\UserReceptionistKeperluan;
+                        $k->user_receptionist_id = $model->id;
+                        $k->keperluan_id = $val['id'];
+                        $k->save();
+                    }
+                }
 
                 $data = array(
                     'success'=>true,
@@ -80,8 +96,39 @@ class UserReceptionistController extends Controller
         return response()->json($data, 201);
     }
 
+    public function signout_receptionist(Request $request)
+    {
+        $rules = [
+            'receptionist'=>'required'
+        ];
+
+        $validasi = \Validator::make($request->all(), $rules);
+
+        if($validasi->fails())
+        {
+            $data = array(
+                'success'=>false,
+                'message'=>"Validation errors",
+                'errors'=>$validasi->errors()->all()
+            );
+        }else{
+            $model = UserReceptionist::find($request->input('receptionist'));
+            $model->active = 'N';
+            $model->save();
+
+            $data = array(
+                'success'=>true,
+                'message'=>'Logout Receptionist berhasil',
+                'errors'=>array()
+            );
+        }
+
+        return response()->json($data, 201);
+    }
+
     public function available_receptionist(){
         $model = UserReceptionist::where('tanggal',date('Y-m-d'))
+            ->where('active','Y')
             ->get()
             ->pluck('receptionist_id');
 
@@ -104,6 +151,7 @@ class UserReceptionistController extends Controller
                     'user',
                 ]
             )
+            ->where('active','Y')
             ->where('receptionist_id',$id)
             ->first();
 
@@ -149,6 +197,7 @@ class UserReceptionistController extends Controller
                         'user',
                     ]
                 )
+                ->where('active','Y')
                 ->where('receptionist_id',$val->id)
                 ->first();
             $list = array();
@@ -189,6 +238,18 @@ class UserReceptionistController extends Controller
 
     public function list_antrian_by_user_receptionist($id){
         //cek antrian dulu ada atau tidak
+        $user_receptionis = \App\Models\UserReceptionist::with(
+            [
+                'keperluan'
+            ]
+        )->find($id);
+        $keperluan = array();
+        foreach($user_receptionis->keperluan as $key=>$val)
+        {
+            $keperluan[]=$val->keperluan_id;
+        }
+
+
         $tersedia = \App\Models\UserReceptionistAntrian::where('tanggal',date('Y-m-d'))
             ->select('antrian_id')
             ->get()
@@ -196,6 +257,7 @@ class UserReceptionistController extends Controller
 
         $antrian_tersedia = \App\Models\Antrian::where('tanggal',date('Y-m-d'))
             ->whereNotIn('id', $tersedia)
+            ->whereIn('keperluan_id',$keperluan)
             ->where('is_finish','N')
             ->orderBy('type','asc')
             ->orderBy('created_at','asc')
@@ -222,6 +284,7 @@ class UserReceptionistController extends Controller
         
                 $list_other_antrian = \App\Models\Antrian::where('tanggal',date('Y-m-d'))
                     ->whereNotIn('id', $list_tersedia)
+                    ->whereIn('keperluan_id',$keperluan)
                     ->where('is_finish','N')
                     ->get();
 
@@ -240,6 +303,7 @@ class UserReceptionistController extends Controller
 
                 $l_antrian_tersedia = \App\Models\Antrian::where('tanggal',date('Y-m-d'))
                     ->whereNotIn('id', $l_tersedia)
+                    ->whereIn('keperluan_id',$keperluan)
                     ->where('is_finish','N')
                     ->first();
 
@@ -269,6 +333,7 @@ class UserReceptionistController extends Controller
                     $l_other_antrian = \App\Models\Antrian::where('tanggal',date('Y-m-d'))
                         ->where('id','!=',$l_current_antrian->antrian_id)
                         ->whereNotIn('id', $tersedia)
+                        ->whereIn('keperluan_id',$keperluan)
                         ->where('is_finish','N')
                         ->get();
 
@@ -304,6 +369,7 @@ class UserReceptionistController extends Controller
         
                 $list_other_antrian = \App\Models\Antrian::where('tanggal',date('Y-m-d'))
                     ->whereNotIn('id', $list_tersedia)
+                    ->whereIn('keperluan_id',$keperluan)
                     ->where('is_finish','N')
                     ->get();
 

@@ -62,9 +62,11 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::get('all-user',[UserController::class,'all']);
 
     Route::resource('keperluan',KeperluanController::class);
+    Route::get('keperluan-all',[KeperluanController::class,'all']);
     Route::resource('receptionist',ReceptionistController::class);
 
     Route::post('signin-receptionist',[UserReceptionistController::class,'store']);
+    Route::post('signout-receptionist',[UserReceptionistController::class,'signout_receptionist']);
     Route::get('get-receptionist',[UserReceptionistController::class,'get_receptionist']);
     Route::get('available-receptionist',[UserReceptionistController::class,'available_receptionist']);
     Route::get('list-antrian-by-user-receptionist/{id}',[UserReceptionistController::class,'list_antrian_by_user_receptionist']);
