@@ -116,10 +116,16 @@ class UserReceptionistController extends Controller
             $model->active = 'N';
             $model->save();
 
+            $current_antrian = \App\Models\UserReceptionistAntrian::where('tanggal',date('Y-m-d'))
+                    ->where('status','Menunggu')
+                    ->delete();
+
             $data = array(
                 'success'=>true,
                 'message'=>'Logout Receptionist berhasil',
-                'errors'=>array()
+                'errors'=>array(),
+                'current_antrian'=>$current_antrian,
+                'model'=>$model
             );
         }
 
@@ -243,6 +249,7 @@ class UserReceptionistController extends Controller
                 'keperluan'
             ]
         )->find($id);
+
         $keperluan = array();
         foreach($user_receptionis->keperluan as $key=>$val)
         {
@@ -288,11 +295,25 @@ class UserReceptionistController extends Controller
                     ->where('is_finish','N')
                     ->get();
 
+                $audio = \App\Models\ReceptionistAudio::where('receptionist_id', $user_receptionis->receptionist_id)
+                    ->where('no_antrian',$current_antrian->antrian->no_antrian)
+                    ->first();
+                
+                $ada_audio = "N";
+                $audio_url="";
+                if($audio)
+                {
+                    $ada_audio = "Y";
+                    $audio_url = asset('uploads/audio/receptionist/'.$audio->audio);
+                }
+
                 $data = array(
                     'success'=>true,
                     'message'=>'Antrian berhasil ditemukan',
                     'current_antrian'=>$current_antrian,
-                    'other_antrian'=>$list_other_antrian
+                    'other_antrian'=>$list_other_antrian,
+                    'ada_audio'=>$ada_audio,
+                    'audio'=>$audio_url
                 );
             }else{
                 $l_tersedia = \App\Models\UserReceptionistAntrian::where('tanggal',date('Y-m-d'))
@@ -337,11 +358,25 @@ class UserReceptionistController extends Controller
                         ->where('is_finish','N')
                         ->get();
 
+                    $audio = \App\Models\ReceptionistAudio::where('receptionist_id', $user_receptionis->receptionist_id)
+                        ->where('no_antrian',$l_current_antrian->antrian->no_antrian)
+                        ->first();
+
+                    $ada_audio = "N";
+                    $audio_url="";
+                    if($audio)
+                    {
+                        $ada_audio = "Y";
+                        $audio_url = asset('uploads/audio/receptionist/'.$audio->audio);
+                    }
+
                     $data = array(
                         'success'=>true,
                         'message'=>'Antrian berhasil dibuat',
                         'current_antrian'=>$l_current_antrian,
-                        'other_antrian'=>$l_other_antrian
+                        'other_antrian'=>$l_other_antrian,
+                        'ada_audio'=>$ada_audio,
+                        'audio'=>$audio_url
                     );
                 }else{
                     $data = array(
@@ -373,11 +408,25 @@ class UserReceptionistController extends Controller
                     ->where('is_finish','N')
                     ->get();
 
+                $audio = \App\Models\ReceptionistAudio::where('receptionist_id', $user_receptionis->receptionist_id)
+                    ->where('no_antrian',$current_antrian->antrian->no_antrian)
+                    ->first();
+
+                $ada_audio = "N";
+                $audio_url="";
+                if($audio)
+                {
+                    $ada_audio = "Y";
+                    $audio_url = asset('uploads/audio/receptionist/'.$audio->audio);
+                }
+
                 $data = array(
                     'success'=>true,
                     'message'=>'Antrian berhasil ditemukan',
                     'current_antrian'=>$current_antrian,
-                    'other_antrian'=>$list_other_antrian
+                    'other_antrian'=>$list_other_antrian,
+                    'ada_audio'=>$ada_audio,
+                    'audio'=>$audio_url
                 );
             }else{
                 $data = array(

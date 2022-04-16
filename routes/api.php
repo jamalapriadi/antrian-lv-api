@@ -9,6 +9,7 @@ use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\KeperluanController;
 use App\Http\Controllers\ReceptionistController;
+use App\Http\Controllers\ReceptionistAudioController;
 use App\Http\Controllers\UserReceptionistController;
 use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\PelayananController;
@@ -78,4 +79,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::get('antrian',[AntrianController::class,'index']);
     Route::get('kategori-antrian',[ReportController::class,'kategori_antrian']);
     Route::get('report-keperluan',[ReportController::class,'report_keperluan']);
+
+    Route::resource('receptionist-audio',ReceptionistAudioController::class);
+    Route::get('audio-by-receptionist/{id}',[ReceptionistAudioController::class,'by_receptionist']);
 });

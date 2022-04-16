@@ -3,9 +3,9 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use App\Models\Receptionist;
+use App\Models\ReceptionistAudio;
 
-class ReceptionistTransformer extends TransformerAbstract
+class ReceptionistAudioTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -30,15 +30,16 @@ class ReceptionistTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(Receptionist $model)
+    public function transform(ReceptionistAudio $model)
     {
         return [
             'id'=>$model->id,
-            'nama'=>$model->nama,
-            'created_at'=>$model->created_at,
+            'receptionist_id'=>$model->receptionist_id,
+            'no_antrian'=>$model->no_antrian,
             'audio'=>$model->audio,
+            'audio_url'=>asset('uploads/audio/receptionist/'.$model->audio),
             'links'=>array( 
-                'detail'=> \URL::to('api/auth/receptionist/'.$model->id)
+                'detail'=> \URL::to('api/auth/receptionist-audio/'.$model->id)
             )
         ];
     }
