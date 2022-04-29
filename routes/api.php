@@ -38,6 +38,7 @@ Route::get('list-keperluan',[KeperluanController::class,'list_keperluan']);
 Route::post('buat-antrian',[AntrianController::class,'simpan_antrian']);
 Route::get('layar/{id}',[UserReceptionistController::class,'layar']);
 Route::get('all-layar',[UserReceptionistController::class,'all_layar']);
+Route::get('antrian/{id}/pdf',[AntrianController::class,'antrian_pdf']);
 
 Route::get('timeframe',[ReportController::class,'timeframe']);
 

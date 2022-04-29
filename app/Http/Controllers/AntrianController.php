@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Antrian;
 use App\Transformers\AntrianTransformer;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class AntrianController extends Controller
 {
     public function index(Request $request)
@@ -82,5 +84,21 @@ class AntrianController extends Controller
         }
 
         return response()->json($data, 201);
+    }
+
+    public function antrian_pdf($id)
+    {
+        $antrian = Antrian::with(
+            [
+                'keperluan'
+            ]
+        )->find($id);
+
+        // return $antrian;
+        // return view('pdf.antrian')
+        //     ->with('antrian',$antrian);
+
+        $pdf = PDF::loadView('pdf.antrian',  ['antrian'=>$antrian]);
+        return $pdf->setPaper('A8', 'portrait')->stream('No Antrian-'.$antrian->no_antrian.'.pdf');
     }
 }
