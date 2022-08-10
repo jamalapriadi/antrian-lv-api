@@ -28,8 +28,14 @@ class AntrianController extends Controller
         return response()->json($response, 200);
     }
 
-    private function getNoAntrian(){
-        $jumlah_hari_ini = Antrian::where('tanggal',date('Y-m-d'))
+    public function getNoAntrian(){
+        $tahun = date('Y');
+        $bulan = date('m');
+        $hari = date('d');
+
+        $jumlah_hari_ini = Antrian::whereYear('tanggal', $tahun)
+            ->whereMonth('tanggal', $bulan)
+            ->whereDay('tanggal',$hari)
             ->count();
 
         $ditambah_satu = $jumlah_hari_ini + 1;
